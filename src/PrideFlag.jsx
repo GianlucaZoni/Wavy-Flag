@@ -1,22 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import range from 'lodash.range';
+
+import GUI from 'lil-gui';
 
 import styles from './FlagStyle.module.css';
 import { COLORS } from './flags.js';
 
 function PrideFlag({
-  variant = 'rainbow', // rainbow | rainbow-original | trans | pan
+  variant = 'rainbow-original', // rainbow | rainbow-original | trans | pan
   width = 200,
   numOfColumns = 10,
   staggeredDelay = 100,
-  billow = 2,
+  billow = 2
 }) {
-  const colors = COLORS[variant];
+    const [currentVariant, setCurrentVariant] = useState(variant);
+    const [colors, setColors] = useState(COLORS[variant]);
 
   const friendlyWidth =
     Math.round(width / numOfColumns) * numOfColumns;
 
   const firstColumnDelay = numOfColumns * staggeredDelay * -1;
+
+  //const ref = useRef()
+
+  useEffect(() => {
+    const gui = new GUI();
+    const variantOptions = { Flag: 1 };
+    gui.add(variantOptions, 'Flag', { LGBT: 0, Rainbow: 1, Trans: 2, Pan: 3 }).onChange((value) => {
+      const variants = ['rainbow', 'rainbow-original', 'trans', 'pan'];
+      setCurrentVariant(variants[value]);
+    });
+    return () => {
+      gui.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    setColors(COLORS[currentVariant]);
+  }, [currentVariant]);
 
   return (
     <div className={styles.flag} style={{ width: friendlyWidth }}>

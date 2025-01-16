@@ -5,8 +5,9 @@ function App() {
   return (
     <>
       <div className="wrapper">
-      <PrideFlag />
-    </div>
+        <PrideFlag />
+      </div>
+
     </>
   )
 }
