@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import range from 'lodash.range';
 
 import GUI from 'lil-gui';
+import Draggable from 'react-draggable';
 
 import styles from './FlagStyle.module.css';
 import { COLORS } from './flags.js';
@@ -40,6 +41,7 @@ function PrideFlag({
   }, [currentVariant]);
 
   return (
+    <Draggable>
     <div className={styles.flag} style={{ width: friendlyWidth }}>
       {range(numOfColumns).map((index) => (
         <div
@@ -54,6 +56,7 @@ function PrideFlag({
         />
       ))}
     </div>
+    </Draggable>
   );
 }
 
