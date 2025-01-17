@@ -17,20 +17,30 @@ function PrideFlag({
     const [currentVariant, setCurrentVariant] = useState(variant);
     const [colors, setColors] = useState(COLORS[variant]);
 
-  const friendlyWidth =
-    Math.round(width / numOfColumns) * numOfColumns;
+    const [currentnumOfColumns, setnumOfColumns] = useState(numOfColumns);
+    const [currentfriendlyWidth, setfriendlyWidth] = useState(friendlyWidth(numOfColumns,width));
+
+
+
+  //const friendlyWidth =
+    //Math.round(width / numOfColumns) * numOfColumns;
 
   const firstColumnDelay = numOfColumns * staggeredDelay * -1;
 
-  //const ref = useRef()
 
   useEffect(() => {
     const gui = new GUI();
     const variantOptions = { Flag: 1 };
+    const flagColumns = { Columns: 10 };
+
     gui.add(variantOptions, 'Flag', { LGBT: 0, Rainbow: 1, Trans: 2, Pan: 3 }).onChange((value) => {
       const variants = ['rainbow', 'rainbow-original', 'trans', 'pan'];
       setCurrentVariant(variants[value]);
     });
+    gui.add(flagColumns, 'Columns', 0, 100).onChange((value) => {
+        setnumOfColumns(value);
+    });
+
     return () => {
       gui.destroy();
     };
@@ -40,10 +50,27 @@ function PrideFlag({
     setColors(COLORS[currentVariant]);
   }, [currentVariant]);
 
+  useEffect(() => {
+    setfriendlyWidth(friendlyWidth(currentnumOfColumns, width));
+  }, [currentnumOfColumns, width]);
+
+  useEffect(() => {
+    setnumOfColumns(numOfColumns);
+  }, [numOfColumns]);
+
+  useEffect(() => {
+    setfriendlyWidth(friendlyWidth(numOfColumns, width));
+  }, [numOfColumns, width]);
+
   return (
-    <Draggable>
-    <div className={styles.flag} style={{ width: friendlyWidth }}>
-      {range(numOfColumns).map((index) => (
+    <Draggable >
+    <div
+        className={styles.flag}
+        style={{
+          width: currentfriendlyWidth
+        }}
+      >
+      {range(currentnumOfColumns).map((index) => (
         <div
           key={index}
           className={styles.column}
@@ -58,6 +85,10 @@ function PrideFlag({
     </div>
     </Draggable>
   );
+}
+
+function friendlyWidth(numOfColumns, width) {
+  return Math.round(width / numOfColumns) * numOfColumns;
 }
 
 function generateGradientString(colors) {
