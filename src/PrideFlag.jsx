@@ -8,8 +8,7 @@ import styles from './FlagStyle.module.css';
 import { COLORS } from './flags.js';
 
 function PrideFlag({
-  variant = 'italian', // rainbow | rainbow-original | trans | pan | italian
-  orientation = 'vertical', // horizontal | vertical
+  variant = 'rainbow-original', // rainbow | rainbow-original | trans | pan
   width = 200,
   numOfColumns = 10,
   staggeredDelay = 100,
@@ -27,7 +26,7 @@ function PrideFlag({
   const currentfriendlyWidth = useMemo(() => friendlyWidth(currentnumOfColumns, width), [currentnumOfColumns, width]);
   const currentfirstColumnDelay = useMemo(() => firstColumnDelay(currentnumOfColumns, currentstaggeredDelay), [currentnumOfColumns, currentstaggeredDelay]);
 
-  const memoizedGenerateGradientString = useCallback(() => generateGradientString(colors,orientation), [colors]);
+  const memoizedGenerateGradientString = useCallback(() => generateGradientString(colors), [colors]);
 
   useEffect(() => {
     const gui = new GUI();
@@ -36,8 +35,8 @@ function PrideFlag({
     const stagDelay = { Delay: 100 };
     const flagBillow = { Billow: 2 };
 
-    gui.add(variantOptions, 'Flag', { LGBT: 0, Rainbow: 1, Trans: 2, Pan: 3, Italy: 4 }).onChange((value) => {
-      const variants = ['rainbow', 'rainbow-original', 'trans', 'pan', 'italian'];
+    gui.add(variantOptions, 'Flag', { LGBT: 0, Rainbow: 1, Trans: 2, Pan: 3 }).onChange((value) => {
+      const variants = ['rainbow', 'rainbow-original', 'trans', 'pan'];
       setCurrentVariant(variants[value]);
     });
     gui.add(flagColumns, 'Columns', 1, 20, 1).onChange((value) => {
@@ -97,7 +96,7 @@ function firstColumnDelay(numOfColumns, staggeredDelay) {
   return numOfColumns * staggeredDelay * -1;
 }
 
-function generateGradientString(colors, orientation) {
+function generateGradientString(colors) {
   const numOfColors = colors.length;
   const segmentHeight = 100 / numOfColors;
 
@@ -108,9 +107,7 @@ function generateGradientString(colors, orientation) {
     return `${color} ${from}% ${to}%`;
   });
 
-  return orientation === 'vertical'
-    ? `linear-gradient(to right, ${gradientStops.join(', ')})`
-    : `linear-gradient(to bottom, ${gradientStops.join(', ')})`;
+  return `linear-gradient(to bottom, ${gradientStops.join(', ')})`;
 }
 
 export default PrideFlag;
