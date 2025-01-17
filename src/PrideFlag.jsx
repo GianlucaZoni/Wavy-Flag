@@ -12,7 +12,7 @@ function PrideFlag({
   width = 200,
   numOfColumns = 10,
   staggeredDelay = 100,
-  billow = 1
+  billow = 2
 }) {
   const [currentVariant, setCurrentVariant] = useState(variant);
   const [colors, setColors] = useState(COLORS[variant]);
@@ -21,6 +21,7 @@ function PrideFlag({
 
   const [currentnumOfColumns, setnumOfColumns] = useState(numOfColumns);
   const [currentstaggeredDelay, setstaggeredDelay] = useState(staggeredDelay);
+  const [currentbillow, setbillow] = useState(billow);
 
   const currentfriendlyWidth = useMemo(() => friendlyWidth(currentnumOfColumns, width), [currentnumOfColumns, width]);
   const currentfirstColumnDelay = useMemo(() => firstColumnDelay(currentnumOfColumns, currentstaggeredDelay), [currentnumOfColumns, currentstaggeredDelay]);
@@ -32,6 +33,7 @@ function PrideFlag({
     const variantOptions = { Flag: 1 };
     const flagColumns = { Columns: 10 };
     const stagDelay = { Delay: 100 };
+    const flagBillow = { Billow: 2 };
 
     gui.add(variantOptions, 'Flag', { LGBT: 0, Rainbow: 1, Trans: 2, Pan: 3 }).onChange((value) => {
       const variants = ['rainbow', 'rainbow-original', 'trans', 'pan'];
@@ -42,7 +44,10 @@ function PrideFlag({
     });
     gui.add(stagDelay, 'Delay', 0, 200, 1).onChange((value) => {
         setstaggeredDelay(value);
-      });
+    });
+    gui.add(flagBillow, 'Billow', 0, 10).onChange((value) => {
+        setbillow(value);
+    });
 
     return () => {
       gui.destroy();
@@ -52,6 +57,10 @@ function PrideFlag({
   useEffect(() => {
     setColors(COLORS[currentVariant]);
   }, [currentVariant]);
+
+  useEffect(() => {
+    setbillow(currentbillow);
+  }, [currentbillow]);
 
   return (
     <Draggable key={currentnumOfColumns} nodeRef={draggableRef}>
@@ -67,7 +76,7 @@ function PrideFlag({
             key={index}
             className={styles.column}
             style={{
-              '--billow': index * billow + 'px',
+              '--billow': index * currentbillow + 'px',
               background: memoizedGenerateGradientString(),
               animationDelay:
                 currentfirstColumnDelay + index * currentstaggeredDelay + 'ms',
