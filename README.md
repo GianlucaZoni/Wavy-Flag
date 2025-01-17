@@ -1,8 +1,14 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Wavy Pixelated Flag
+This project is a fluid simulation using the FLIP (Fluid-Implicit Particle) method. The simulation is rendered using WebGL and provides an interactive interface for users to manipulate the fluid and observe its behavior.
+## Features
+- Click & Drag around the Flag
+- Flag Oscillation
+- Flag Picker (horizontal stripe flags for now)
+## Demo
+- GUI for Flag variables control
+- Draggable Flag
+## Tech Stack
+- React
+- lil GUI
+## Reference
+[Animated Pride Flags](https://www.joshwcomeau.com/animation/pride-flags/) by [Josh Comeau](https://www.joshwcomeau.com/)

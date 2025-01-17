@@ -28,5 +28,10 @@ export const COLORS = {
       'hsl(331deg 100% 55%)',
       'hsl(50deg 100% 50%)',
       'hsl(200deg 100% 55%)',
-    ]
+    ],
+    italian: [
+    'hsl(120deg 100% 35%)', // Green
+    'hsl(0deg 0% 100%)',    // White
+    'hsl(0deg 100% 50%)',   // Red
+  ]
   };
