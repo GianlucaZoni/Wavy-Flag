@@ -20,12 +20,14 @@ function PrideFlag({
     const [currentnumOfColumns, setnumOfColumns] = useState(numOfColumns);
     const [currentfriendlyWidth, setfriendlyWidth] = useState(friendlyWidth(numOfColumns,width));
 
+    const [currentfirstColumnDelay, setfirstColumnDelay] = useState(firstColumnDelay(numOfColumns,staggeredDelay));
+
 
 
   //const friendlyWidth =
     //Math.round(width / numOfColumns) * numOfColumns;
 
-  const firstColumnDelay = numOfColumns * staggeredDelay * -1;
+  //const firstColumnDelay = numOfColumns * staggeredDelay * -1;
 
 
   useEffect(() => {
@@ -37,7 +39,7 @@ function PrideFlag({
       const variants = ['rainbow', 'rainbow-original', 'trans', 'pan'];
       setCurrentVariant(variants[value]);
     });
-    gui.add(flagColumns, 'Columns', 0, 100).onChange((value) => {
+    gui.add(flagColumns, 'Columns', 1, 20, 1).onChange((value) => {
         setnumOfColumns(value);
     });
 
@@ -55,12 +57,14 @@ function PrideFlag({
   }, [currentnumOfColumns, width]);
 
   useEffect(() => {
-    setnumOfColumns(numOfColumns);
-  }, [numOfColumns]);
+    setfirstColumnDelay(firstColumnDelay(currentnumOfColumns, staggeredDelay));
+  }, [currentnumOfColumns, staggeredDelay]);
 
   useEffect(() => {
-    setfriendlyWidth(friendlyWidth(numOfColumns, width));
-  }, [numOfColumns, width]);
+    setnumOfColumns(currentnumOfColumns);
+  }, [currentnumOfColumns]);
+
+
 
   return (
     <Draggable >
@@ -78,7 +82,7 @@ function PrideFlag({
             '--billow': index * billow + 'px',
             background: generateGradientString(colors),
             animationDelay:
-              firstColumnDelay + index * staggeredDelay + 'ms',
+              currentfirstColumnDelay + index * staggeredDelay + 'ms',
           }}
         />
       ))}
@@ -89,6 +93,10 @@ function PrideFlag({
 
 function friendlyWidth(numOfColumns, width) {
   return Math.round(width / numOfColumns) * numOfColumns;
+}
+
+function firstColumnDelay(numOfColumns, staggeredDelay) {
+  return numOfColumns * staggeredDelay * -1;
 }
 
 function generateGradientString(colors) {
