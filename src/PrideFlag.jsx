@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import range from 'lodash.range';
 
 import GUI from 'lil-gui';
@@ -12,15 +12,18 @@ function PrideFlag({
   width = 200,
   numOfColumns = 10,
   staggeredDelay = 100,
-  billow = 2
+  billow = 1
 }) {
   const [currentVariant, setCurrentVariant] = useState(variant);
   const [colors, setColors] = useState(COLORS[variant]);
 
+  const draggableRef = useRef(null);
+
   const [currentnumOfColumns, setnumOfColumns] = useState(numOfColumns);
+  const [currentstaggeredDelay, setstaggeredDelay] = useState(staggeredDelay);
 
   const currentfriendlyWidth = useMemo(() => friendlyWidth(currentnumOfColumns, width), [currentnumOfColumns, width]);
-  const currentfirstColumnDelay = useMemo(() => firstColumnDelay(currentnumOfColumns, staggeredDelay), [currentnumOfColumns, staggeredDelay]);
+  const currentfirstColumnDelay = useMemo(() => firstColumnDelay(currentnumOfColumns, currentstaggeredDelay), [currentnumOfColumns, currentstaggeredDelay]);
 
   const memoizedGenerateGradientString = useCallback(() => generateGradientString(colors), [colors]);
 
@@ -28,6 +31,7 @@ function PrideFlag({
     const gui = new GUI();
     const variantOptions = { Flag: 1 };
     const flagColumns = { Columns: 10 };
+    const stagDelay = { Delay: 100 };
 
     gui.add(variantOptions, 'Flag', { LGBT: 0, Rainbow: 1, Trans: 2, Pan: 3 }).onChange((value) => {
       const variants = ['rainbow', 'rainbow-original', 'trans', 'pan'];
@@ -36,6 +40,9 @@ function PrideFlag({
     gui.add(flagColumns, 'Columns', 1, 20, 1).onChange((value) => {
       setnumOfColumns(value);
     });
+    gui.add(stagDelay, 'Delay', 0, 200, 1).onChange((value) => {
+        setstaggeredDelay(value);
+      });
 
     return () => {
       gui.destroy();
@@ -47,8 +54,9 @@ function PrideFlag({
   }, [currentVariant]);
 
   return (
-    <Draggable>
+    <Draggable key={currentnumOfColumns} nodeRef={draggableRef}>
       <div
+        ref={draggableRef}
         className={styles.flag}
         style={{
           width: currentfriendlyWidth
@@ -62,7 +70,7 @@ function PrideFlag({
               '--billow': index * billow + 'px',
               background: memoizedGenerateGradientString(),
               animationDelay:
-                currentfirstColumnDelay + index * staggeredDelay + 'ms',
+                currentfirstColumnDelay + index * currentstaggeredDelay + 'ms',
             }}
           />
         ))}
