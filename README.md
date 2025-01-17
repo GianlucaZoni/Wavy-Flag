@@ -1,5 +1,5 @@
 # Wavy Pixelated Flag
-This project is a fluid simulation using the FLIP (Fluid-Implicit Particle) method. The simulation is rendered using WebGL and provides an interactive interface for users to manipulate the fluid and observe its behavior.
+Wavy pixellated flags with neat react and css tricks
 ## Features
 - Click & Drag around the Flag
 - Flag Oscillation
